@@ -9,6 +9,8 @@ class Buku extends RestController
 	{
 		parent::__construct();
 		$this->load->model('m_buku', 'buku');
+		// $this->methods['index_get']['limit'] = 2;
+		// $this->methods['index_delete']['limit'] = 2;
 	}
 
 	public function index_get()
