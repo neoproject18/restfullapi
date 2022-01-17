@@ -6,34 +6,75 @@ use Firebase\JWT\Key;
 
 class Login extends RestController
 {
-	private $_key = "example_key";
-	public function index_post()
+	private $_key;
+	public function __construct()
 	{
-		$payload = array(
-			"iss" => "http://example.org",
-			"aud" => "http://example.com",
-			"iat" => 1356999524,
-			"nbf" => 1357000000
-		);
-
-		$jwt = JWT::encode($payload, $this->_key, 'HS256');
-		$decoded = JWT::decode($jwt, new Key($this->_key, 'HS256'));
-
-		// print_r($decoded);
-
-		$decoded_array = (array) $decoded;
-
-		JWT::$leeway = 60; // $leeway in seconds
-		$decoded = JWT::decode($jwt, new Key($this->_key, 'HS256'));
-
-		$this->response([
-			'status' => true,
-			'message' => 'Login berhasil',
-			'result' => $jwt
-		], self::HTTP_OK);
+		parent::__construct();
+		$this->_key = config_item("jwt_secret_key");
+		$this->load->model('m_user', 'user');
 	}
 
-	public function cektoken_post()
+	public function index_post()
+	{
+		$date = new DateTime();
+		$username = $this->post('username', TRUE);
+		$password = hash('sha512', $this->post('password', TRUE) . $this->_key);
+		$datauser = $this->user->login($username, $password)[0];
+
+		$this->form_validation->set_rules(
+			'username',
+			'Username',
+			'required',
+			array('required' => 'Silahkan masukkan username!')
+		);
+
+		$this->form_validation->set_rules(
+			'password',
+			'Password',
+			'required',
+			array('required' => 'Silahkan masukkan password!')
+		);
+
+		if ($this->form_validation->run() == false) {
+			$this->response([
+				'status' => false,
+				'message' => strip_tags(validation_errors())
+			], self::HTTP_BAD_REQUEST);
+		} else {
+			if ($datauser) {
+				$payload['username'] = $datauser->username;
+				$payload['nama_user'] = $datauser->nama_user;
+				$payload['password'] = $datauser->password;
+				$payload['id_role'] = $datauser->id_role;
+				$payload['iat'] = $date->getTimestamp(); //waktu di buat
+				$payload['exp'] = $date->getTimestamp() + (86400 * 360 * 10); // 10 tahun
+
+				$this->response(
+					[
+						'status' => true,
+						'message' => 'Login berhasil',
+						'result' => array(
+							"username" => $datauser->username,
+							"nama" => $datauser->nama_user,
+							"id_role" => $datauser->id_role,
+						),
+						"token" => JWT::encode($payload, $this->_key, 'HS256')
+					],
+					self::HTTP_OK
+				);
+			} else {
+				$this->response(
+					[
+						'status' => false,
+						'message' => ' Username atau Password Salah'
+					],
+					self::HTTP_NOT_FOUND
+				);
+			}
+		}
+	}
+
+	public function index_get()
 	{
 		$jwt = $this->input->get_request_header('Authorization');
 
@@ -44,12 +85,51 @@ class Login extends RestController
 				'message' => 'Cek Token',
 				'result' => $decode
 			], self::HTTP_OK);
-			// if ($this->m_login->is_valid_num($decode->username) > 0) {
-			// 	$this->session->set_userdata('login_appsi_servis', $decode);
-			// 	return true;
-			// }
 		} catch (Exception $e) {
-			exit(json_encode(array('status_code' => 401, 'message' => 'Invalid Token',)));
+			$this->response([
+				'status' => false,
+				'message' => 'Invalid Token'
+			], self::HTTP_UNAUTHORIZED);
 		}
 	}
+
+	protected function cektoken()
+	{
+		$jwt = $this->input->get_request_header('Authorization');
+
+		try {
+			$decode = JWT::decode($jwt, $this->_key, array('HS256'));
+		} catch (Exception $e) {
+			$this->response([
+				'status' => false,
+				'message' => 'Invalid Token'
+			], self::HTTP_UNAUTHORIZED);
+		}
+	}
+
+
+
+	// public function index2_post()
+	// {
+	// 	$payload = array(
+	// 		"iss" => "http://example.org",
+	// 		"aud" => "http://example.com",
+	// 		"iat" => 1356999524,
+	// 		"nbf" => 1357000000
+	// 	);
+
+	// 	$jwt = JWT::encode($payload, $this->_key, 'HS256');
+	// 	$decoded = JWT::decode($jwt, new Key($this->_key, 'HS256'));
+
+	// 	$decoded_array = (array) $decoded;
+
+	// 	JWT::$leeway = 60; // $leeway in seconds
+	// 	$decoded = JWT::decode($jwt, new Key($this->_key, 'HS256'));
+
+	// 	$this->response([
+	// 		'status' => true,
+	// 		'message' => 'Login berhasil',
+	// 		'result' => $jwt
+	// 	], self::HTTP_OK);
+	// }
 }
