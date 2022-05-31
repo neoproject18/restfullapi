@@ -1,5 +1,5 @@
 /*
-SQLyog Professional v12.5.1 (32 bit)
+SQLyog Professional v12.5.1 (64 bit)
 MySQL - 10.1.34-MariaDB : Database - dbperpus
 *********************************************************************
 */
@@ -49,9 +49,13 @@ CREATE TABLE `limits` (
   `hour_started` int(11) NOT NULL,
   `api_key` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `limits` */
+
+insert  into `limits`(`id`,`uri`,`count`,`hour_started`,`api_key`) values 
+(1,'uri:buku/index:get',2,1642146289,'123456780'),
+(2,'uri:buku/index:get',2,1642146347,'123456789');
 
 /*Table structure for table `tbl_buku` */
 
@@ -68,7 +72,7 @@ CREATE TABLE `tbl_buku` (
   `gambar` varchar(255) DEFAULT NULL,
   `isdeleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_buku`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_buku` */
 
@@ -87,7 +91,8 @@ insert  into `tbl_buku`(`id_buku`,`judul_buku`,`tahun_terbit`,`penerbit`,`penuli
 (14,'Pemulihan Jiwa',2014,'Gramedia','Dedy Susanto',1,10,'./uploads/buku/1636959237.jpg',0),
 (15,'Kungfu Boy',2020,'Kanisius','Lala',3,10,'./uploads/buku/1636959614.jpg',0),
 (16,'Pemulihan Jiwa 2',2015,'Gramedia','Dedy Susanto',1,10,'./uploads/buku/1636959846.jpg',0),
-(17,'Ramayana',2015,'Erlangga','Erwin J. Patty',2,100,NULL,0);
+(17,'Ramayana',2015,'Erlangga','Erwin J. Patty',2,100,NULL,0),
+(18,'Mahabharata',2000,'Andi','Edwin',2,10,NULL,0);
 
 /*Table structure for table `tbl_bulan` */
 
