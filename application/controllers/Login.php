@@ -1,4 +1,13 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json; charset=UTF-8');
+header('Access-Control-Allow-Methods: GET,POST,PUT,PATCH,DELETE');
+header('Access-Control-Allow-Headers: Content-Type,Access-Control-Allow-Headers,Authorization,X-Requested-With');
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+	header('HTTP/1.1 200 OK');
+	exit();
+}
 
 use chriskacerguis\RestServer\RestController;
 use Firebase\JWT\JWT;
@@ -77,6 +86,7 @@ class Login extends RestController
 	public function index_get()
 	{
 		$jwt = $this->input->get_request_header('Authorization');
+		// $jwt = $this->post('Authorization', TRUE);
 
 		try {
 			$decode = JWT::decode($jwt, $this->_key, array('HS256'));
@@ -96,6 +106,7 @@ class Login extends RestController
 	protected function cektoken()
 	{
 		$jwt = $this->input->get_request_header('Authorization');
+		// $jwt = $this->post('Authorization', TRUE);
 
 		try {
 			$decode = JWT::decode($jwt, $this->_key, array('HS256'));

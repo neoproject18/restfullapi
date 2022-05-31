@@ -2,8 +2,6 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once APPPATH . 'controllers/Login.php';
 
-use chriskacerguis\RestServer\RestController;
-
 class Buku extends Login
 {
 	public function __construct()
