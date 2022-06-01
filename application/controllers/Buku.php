@@ -43,7 +43,7 @@ class Buku extends Login
 			$this->response([
 				'status' => false,
 				'message' => 'Masukkan Id',
-			], self::HTTP_BAD_REQUEST);
+			], self::HTTP_NOT_FOUND);
 		} else {
 			if ($this->buku->deleteBuku($id) > 0) {
 				$this->response([
@@ -54,7 +54,7 @@ class Buku extends Login
 				$this->response([
 					'status' => false,
 					'message' => 'Data tidak ditemukan!',
-				], self::HTTP_BAD_REQUEST);
+				], self::HTTP_INTERNAL_ERROR);
 			}
 		}
 	}
@@ -65,7 +65,7 @@ class Buku extends Login
 			$this->response([
 				'status' => false,
 				'message' => strip_tags(validation_errors())
-			], self::HTTP_BAD_REQUEST);
+			], self::HTTP_FORBIDDEN);
 		} else {
 			$data = [
 				"judul_buku" => $this->post('judul'),
@@ -85,7 +85,7 @@ class Buku extends Login
 				$this->response([
 					'status' => false,
 					'message' => 'Buku gagal ditambahkan!',
-				], self::HTTP_BAD_REQUEST);
+				], self::HTTP_INTERNAL_ERROR);
 			}
 		}
 	}
@@ -97,7 +97,7 @@ class Buku extends Login
 			$this->response([
 				'status' => false,
 				'message' => strip_tags(validation_errors())
-			], self::HTTP_BAD_REQUEST);
+			], self::HTTP_FORBIDDEN);
 		} else {
 			$id = $this->put('id_buku');
 			$data = [
@@ -118,7 +118,7 @@ class Buku extends Login
 				$this->response([
 					'status' => false,
 					'message' => 'Buku gagal diperbarui!',
-				], self::HTTP_BAD_REQUEST);
+				], self::HTTP_INTERNAL_ERROR);
 			}
 		}
 	}
