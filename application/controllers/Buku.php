@@ -53,7 +53,7 @@ class Buku extends Login
 			} else {
 				$this->response([
 					'status' => false,
-					'message' => 'Data tidak ditemukan!',
+					'message' => 'Buku gagal dihapus!',
 				], self::HTTP_INTERNAL_ERROR);
 			}
 		}

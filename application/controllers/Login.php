@@ -55,6 +55,7 @@ class Login extends RestController
 				$payload['nama_user'] = $datauser->nama_user;
 				$payload['password'] = $datauser->password;
 				$payload['id_role'] = $datauser->id_role;
+				$payload['nama_role'] = $datauser->nama_role;
 				$payload['iat'] = $date->getTimestamp(); //waktu di buat
 				$payload['exp'] = $date->getTimestamp() + (86400 * 360 * 10); // 10 tahun
 
@@ -66,6 +67,7 @@ class Login extends RestController
 							"username" => $datauser->username,
 							"nama" => $datauser->nama_user,
 							"id_role" => $datauser->id_role,
+							"nama_role" => $datauser->nama_role,
 						),
 						"token" => JWT::encode($payload, $this->_key, 'HS256')
 					],
