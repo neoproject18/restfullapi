@@ -72,7 +72,7 @@ CREATE TABLE `tbl_buku` (
   `gambar` varchar(255) DEFAULT NULL,
   `isdeleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_buku`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_buku` */
 
@@ -92,7 +92,8 @@ insert  into `tbl_buku`(`id_buku`,`judul_buku`,`tahun_terbit`,`penerbit`,`penuli
 (15,'Kungfu Boy',2020,'Kanisius','Lala',3,10,'./uploads/buku/1636959614.jpg',0),
 (16,'Pemulihan Jiwa 2',2015,'Gramedia','Dedy Susanto',1,10,'./uploads/buku/1636959846.jpg',0),
 (17,'Ramayana',2015,'Erlangga','Erwin J. Patty',2,100,NULL,0),
-(18,'Mahabharata',2000,'Andi','Edwin',2,10,NULL,0);
+(18,'Mahabharata',2000,'Andi','Edwin',2,10,NULL,0),
+(19,'36 Jam Jago Coding',2017,'Gramedia','Priadi Wibisono',1,20,NULL,0);
 
 /*Table structure for table `tbl_bulan` */
 
