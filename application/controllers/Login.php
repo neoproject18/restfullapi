@@ -28,7 +28,6 @@ class Login extends RestController
 		$date = new DateTime();
 		$username = $this->post('username', TRUE);
 		$password = hash('sha512', $this->post('password', TRUE) . $this->_key);
-		$datauser = $this->user->login($username, $password)[0];
 
 		$this->form_validation->set_rules(
 			'username',
@@ -50,6 +49,7 @@ class Login extends RestController
 				'message' => strip_tags(validation_errors())
 			], self::HTTP_BAD_REQUEST);
 		} else {
+			$datauser = $this->user->login($username, $password)[0];
 			if ($datauser) {
 				$payload['username'] = $datauser->username;
 				$payload['nama_user'] = $datauser->nama_user;
@@ -57,7 +57,7 @@ class Login extends RestController
 				$payload['id_role'] = $datauser->id_role;
 				$payload['nama_role'] = $datauser->nama_role;
 				$payload['iat'] = $date->getTimestamp(); //waktu di buat
-				$payload['exp'] = $date->getTimestamp() + (86400 * 360 * 10); // 10 tahun
+				$payload['exp'] = $date->getTimestamp() + 30; // 30 tahun
 
 				$this->response(
 					[
